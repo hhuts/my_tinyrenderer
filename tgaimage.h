@@ -10,7 +10,7 @@ class TGA_HEAD{
 
     char idlength;//图像id字符串长度
     char colormaptype;//调色板类型
-    char datadypecode;//图像类型码
+    char datatypecode;//图像类型码
     short cololrmaporigin;//调色板起始位置
     short colormaplength;//调色板颜色数量
     char colormapdepth;//调色板每个颜色的位数
