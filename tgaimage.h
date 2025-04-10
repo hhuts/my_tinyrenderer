@@ -70,7 +70,7 @@ class TGAColor{
 class TGAimage{
     protected:
         unsigned char *data;
-        int weight;
+        int width;
         int height;
         int bytespp;
 
@@ -94,7 +94,7 @@ class TGAimage{
         bool set_color(int x,int y,TGAColor const &c);
         ~TGAimage();
         TGAimage & operator= (const TGAimage &image);
-        int get_weight();
+        int get_width();
         int get_height();
         int get_bytespp();
         unsigned char *buffer();
