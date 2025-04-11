@@ -24,10 +24,10 @@ class TGA_HEAD{
 #pragma pack(pop)
 
 class TGAColor{
+    public:
+
     unsigned char bgra[4];
     unsigned char bytespp;
-
-    public:
 
     TGAColor():bgra(),bytespp(1){
         for(auto& i:bgra){
@@ -75,7 +75,7 @@ class TGAimage{
         int bytespp;
 
         bool load_rle_data(std::ifstream &in);
-        bool unload_rle_data(std::ostream &out);
+        bool unload_rle_data(std::ofstream &out);
     public:
         enum format{
             B=1,RGB=3,RGBA=4
