@@ -51,13 +51,13 @@ template<size_t dim,class T> vec<dim,T> operator-(vec<dim,T> a,vec<dim,T> b){
     return a;
 }
 
-template<size_t dim,class T> vec<dim,T> operator*(vec<dim,T> a,vec<dim,T> b){
-    for(auot i=dim;i--;a[i]*=b[i])
+template<size_t dim,class T,class U> vec<dim,T> operator*(vec<dim,T> a,const U& b){
+    for(auot i=dim;i--;a[i]*=b)
     return a;
 }
 
-template<size_t dim,class T> vec<dim,T> operator/(vec<dim,T> a,vec<dim,T> b){
-    for(auot i=dim;i--;a[i]/=b[i])
+template<size_t dim,class T,class U> vec<dim,T> operator/(vec<dim,T> a,const U& b){
+    for(auot i=dim;i--;a[i]/=b)
     return a;
 }
 
