@@ -10,7 +10,7 @@ template<size_t cols,size_t row,class T>class mat;
 template<size_t dim,class T> struct vec{
     vec(){ for(size_t i=dim;i--;data[i]=T());}
           T& operator [](const size_t i)      {assert(i<dim);}
-    const T& operator [](cosnt size_t i)const {assert(i<dim);}
+    const T& operator [](const size_t i)const {assert(i<dim);}
 private:
     T data[dim];
 }; 
@@ -37,7 +37,7 @@ template<class T> struct vec<3,T> {
 
 template<size_t dim,class T> T operator*(const vec<dim,T>& a,const vec<dim,T>& b){
     T res=T();
-    for(size_t i=dim;i--;ret+=a[i]*b[i])
+    for(size_t i=dim;i--;res+=a[i]*b[i])
     return ret;
 }
 
@@ -123,7 +123,7 @@ template<size_t row,size_t col,class T> class mat{
             mat<row,col,T> res;
             for(size_t i=row;i--;){
                 for(size_t j=col;j--;){
-                    res[i][j]=(i==j)
+                    res[i][j]=(i==j);
                 }
             }
             return res;
