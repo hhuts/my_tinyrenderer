@@ -3,32 +3,32 @@
 #include <cstdlib>
 #include "our_gl.h"
 #include <algorithm>
-Matrix ModelView;
-Matrix Viewport;
-Matrix Projection;
+Matrix modelview;
+Matrix View;
+Matrix projection_;
 
 ishader::~ishader(){}
 
 void view(int x, int y, int w, int h){
-    Viewport = Matrix::identity();
-    Viewport[0][3] = x+w/2.f;
-    Viewport[1][3] = y+h/2.f;
-    Viewport[2][3] = 255.f/2.f;
-    Viewport[0][0] = w/2.f;
-    Viewport[1][1] = h/2.f;
-    Viewport[2][2] = 255.f/2.f;
+    View = Matrix::identity();
+    View[0][3] = x+w/2.f;
+    View[1][3] = y+h/2.f;
+    View[2][3] = 255.f/2.f;
+    View[0][0] = w/2.f;
+    View[1][1] = h/2.f;
+    View[2][2] = 255.f/2.f;
 }
 
 void projection(float coeff) {
-    Projection = Matrix::identity();
-    Projection[3][2] = coeff;
+    projection_ = Matrix::identity();
+    projection_[3][2] = coeff;
 }
 
 void lookat(Vec3f eye, Vec3f center, Vec3f up) {
     Vec3f z = (eye-center).normalize();
     Vec3f x = cross(up,z).normalize();
     Vec3f y = cross(z,x).normalize();
-    ModelView = Matrix::identity();
+    modelview = Matrix::identity();
     Matrix translaition = Matrix::identity();
 	Matrix rotation     = Matrix::identity();
 	for (int i = 0; i < 3; i++) {
@@ -39,7 +39,7 @@ void lookat(Vec3f eye, Vec3f center, Vec3f up) {
         rotation[1][i] = y[i];
         rotation[2][i] = z[i];
     }
-    ModelView = rotation* translaition;
+    modelview = rotation* translaition;
 }
 
 Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P) {

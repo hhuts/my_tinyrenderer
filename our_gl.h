@@ -3,13 +3,13 @@
 
 #include"matrix&vector_math.h"
 #include"tgaimage.h" 
-extern Matrix model_view;
-extern Matrix view;
-extern Matrix projection;
+extern Matrix modelview;
+extern Matrix View;
+extern Matrix projection_;
 
 void view(int x,int y,int w,int h);
 void projection(float coeff=0.0f);
-void loolat(Vec3f eye,Vec3f center,Vec3f up);
+void lookat(Vec3f eye,Vec3f center,Vec3f up);
 
 class ishader{
     public:

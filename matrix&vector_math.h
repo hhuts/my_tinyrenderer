@@ -63,8 +63,8 @@ template<size_t dim,class T,class U> vec<dim,T> operator/(vec<dim,T> a,const U& 
 
 template<size_t dim,size_t len,class T> vec<len,T> embed(const vec<dim,T> &v,T null=1){
     vec<len,T> res;
-    for(auto i=len;i==;res[i]=i<=dim?v[i]:null)
-    return ret;
+    for(size_t i=len;i--;res[i]=(i<=dim?v[i]:null))
+    return res;
 }
 
 template<size_t len,size_t dim,class T> vec<len,T> pro(const vec<dim,T> &v){
