@@ -100,4 +100,4 @@ class TGAimage{
         unsigned char *buffer();
         void clear();
 };
-#endif 
+#endif // IMAGE_H
