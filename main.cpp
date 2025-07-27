@@ -60,9 +60,9 @@ int main(int argc,char **argv)
         }
         triangle(screen_coords, shader, image, zbuffer);
     }
-    image.  vertically();
+    image.vertically();
     zbuffer.vertically();
-    image.  write_tga_file("output.tga");
+    image.write_tga_file("output.tga");
     zbuffer.write_tga_file("zbuffer.tga");
 
     delete model_;
