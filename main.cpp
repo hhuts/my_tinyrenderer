@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "tgaimage.h"
 #include "model.h"
-#include "matrix&vector_math.h"
+#include "matrix_vector_math.h"
 #include "our_gl.h"
 
 model *model_=NULL;
@@ -43,7 +43,7 @@ int main(int argc,char **argv)
     if(2==argc){
         model_=new model(argv[1]);
     }else{
-        model_=new model("D:/my_tinyrenderer/obj/african_head.obj");
+        model_=new model("obj/cube.obj");
     }
 
     lookat(eye,center,up);

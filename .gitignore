@@ -22,3 +22,6 @@ zbuffer.tga
 .DS_Store
 *~
 
+build/
+
+obj/

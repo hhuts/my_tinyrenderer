@@ -2,7 +2,7 @@
 #define _MODEL
 #include<vector>
 #include<string>
-#include"matrix&vector_math.h"
+#include"matrix_vector_math.h"
 #include"tgaimage.h"
 class model{
     private:

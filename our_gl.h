@@ -1,7 +1,7 @@
 #ifndef GL
 #define GL
 
-#include"matrix&vector_math.h"
+#include"matrix_vector_math.h"
 #include"tgaimage.h" 
 extern Matrix modelview;
 extern Matrix View;
