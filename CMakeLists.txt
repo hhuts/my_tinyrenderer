@@ -1,11 +1,18 @@
-cmake_minimum_required(VERSION 3.31)  # 版本号不需要补丁号(3.31.4→3.31)
+cmake_minimum_required(VERSION 3.10)
+project(TinyRenderer CXX)
 
-project(tinyrender LANGUAGES CXX)  # LANGUAGES参数更规范
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(mini_tinyrender 
-    main.cpp 
-    matrix_vector_math.cpp  # &符号在CMake中可能导致问题
-    model.cpp 
-    our_gl.cpp 
+set(SOURCES
+    main.cpp
+    model.cpp
+    our_gl.cpp
     tgaimage.cpp
+    "matrix&vector_math.cpp"
 )
+
+add_executable(main ${SOURCES})
+
+target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
