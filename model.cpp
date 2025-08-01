@@ -52,7 +52,7 @@ int model::nverts(){
     return (int)verts_.size();
 }
 
-int model::nverts(){
+int model::nfaces(){
     return (int)faces.size();
 }
 
