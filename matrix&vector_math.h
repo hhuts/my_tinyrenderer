@@ -98,28 +98,28 @@ template<class T> struct dt<1,T>{
     }
 };
 
-template<size_t row,size_t col,class T> class mat{
-    vec<col,T> rows[row];
+template<size_t Row,size_t Col,class T> class mat{
+    vec<Col,T> rows[Row];
     public:
         mat(){}
 
-        vec<col,T>& operator[](const size_t idx){
-            assert(idx<row);
-            return row[idx];
+        vec<Col,T>& operator[](const size_t idx){
+            assert(idx<Row);
+            return rows[idx];
         }
         
-        vec<row,T>& col(const size_t idx){
+        vec<Row,T>& col(const size_t idx){
             assert(idx<col);
-            vec<row,T> res;
-            for(size_t i=row;i--;res[i]=mat[i][idx])
+            vec<Row,T> res;
+            for(size_t i=Row;i--;res[i]=mat[i][idx])
             return res;
         }
 
-        void set_col(size_t idx,vec<row,T> v){
-            assert(idx<col);
-            for(size_t i=row;i--;mat[i][idx]=v[i])
+        void set_col(size_t idx,vec<Row,T> v){
+            assert(idx<Col);
+            for(size_t i=Row;i--;mat[i][idx]=v[i])
         }
-        static mat<row,col,T> identity(){
+        static mat<row,Col,T> identity(){
             mat<row,col,T> res;
             for(size_t i=row;i--;){
                 for(size_t j=col;j--;){
@@ -135,7 +135,7 @@ template<size_t row,size_t col,class T> class mat{
             mat<row-1,col-1,T> res;
             for(size_t i=row-1;i--;){
                 for(size_t j=col-1;j--){
-                    res[i][j]=row[i<row_?i:i+1][j<col?j:j+1];
+                    res[i][j] = rows[i < row_ ? i : i + 1][j < col_ ? j : j + 1];
                 }
             }
             return res;
