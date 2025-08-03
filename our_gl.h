@@ -18,6 +18,8 @@ class ishader{
     virtual bool fragment(Vec3f bar,TGAColor &color)=0;
 };
 
-void triangle(Vec4f *pts,ishader &shader,TGAimage &image,TGAimage &zbuffer);
+// Rasterizes a triangle using the provided shader, writing the resulting
+// color to `image` and the fragment depth to `zbuffer`.
+void triangle(Vec4f *pts, ishader &shader, TGAimage &image, TGAimage &zbuffer);
 
 #endif
