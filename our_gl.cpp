@@ -55,7 +55,21 @@ Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P) {
     return Vec3f(-1,1,1);
 }
 
-void triangle(Vec4f *pts,ishader &shader,TGAimage &zbuffer,TGAimage &image){
+// Rasterize a triangle defined by three homogeneous points.  `image`
+// stores the final color while `zbuffer` keeps track of depth values so
+// we don't draw fragments hidden behind others.  The order of the image
+// and z-buffer parameters previously differed between the declaration in
+// the header and the implementation here, causing them to be swapped when
+// calling the function.  As a consequence the depth buffer was written to
+// the color image (resulting in the uniform blue output reported by the
+// user) and the actual colors were written into the z-buffer.
+//
+// To fix this we align the parameter order with the declaration in
+// `our_gl.h` so that the third argument is the color image and the fourth
+// is the z-buffer.  Additionally we correct the computation of the
+// interpolated depth value to use the z-component of each vertex instead
+// of the first vertex for all components.
+void triangle(Vec4f *pts, ishader &shader, TGAimage &image, TGAimage &zbuffer) {
     Vec2f bboxmin( std::numeric_limits<float>::max(),  std::numeric_limits<float>::max());
     Vec2f bboxmax(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
     for (int i=0; i<3; i++) {
@@ -70,18 +84,25 @@ void triangle(Vec4f *pts,ishader &shader,TGAimage &zbuffer,TGAimage &image){
     TGAColor color;
     for(p.x=bboxmin.x;p.x<=bboxmax.x;p.x++){
         for(p.y=bboxmin.y;p.y<=bboxmax.y;p.y++){
-            Vec3f c = barycentric(pro<2>(pts[0]/pts[0][3]), pro<2>(pts[1]/pts[1][3]), pro<2>(pts[2]/pts[2][3]), pro<2>(p));
+            Vec3f c = barycentric(pro<2>(pts[0] / pts[0][3]),
+                                 pro<2>(pts[1] / pts[1][3]),
+                                 pro<2>(pts[2] / pts[2][3]),
+                                 pro<2>(p));
 
-            float z_p=(pts[0][2]/pts[0][3])*c.x+(pts[0][2]/pts[1][3])*c.y+(pts[0][2]/pts[2][3])*c.z;
-            int frag_depth=std::max(0,std::min(255,int(z_p+.5f)));
+            float z_p = (pts[0][2] / pts[0][3]) * c.x +
+                        (pts[1][2] / pts[1][3]) * c.y +
+                        (pts[2][2] / pts[2][3]) * c.z;
+            int frag_depth = std::max(0, std::min(255, int(z_p + .5f)));
 
-            if (c.x<0 || c.y<0 || c.z<0 || zbuffer.get_color(p.x, p.y)[0]>frag_depth) continue;
+            if (c.x < 0 || c.y < 0 || c.z < 0 ||
+                zbuffer.get_color(p.x, p.y)[0] > frag_depth)
+                continue;
 
-            bool discard=shader.fragment(c,color);
+            bool discard = shader.fragment(c, color);
 
-            if(!discard){
-                zbuffer.set_color(p.x,p.y,TGAColor(frag_depth));
-                image.set_color(p.x,p.y,color);
+            if (!discard) {
+                zbuffer.set_color(p.x, p.y, TGAColor(frag_depth));
+                image.set_color(p.x, p.y, color);
             }
         }
     }
