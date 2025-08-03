@@ -66,5 +66,6 @@ int main(int argc,char **argv)
     zbuffer.write_tga_file("zbuffer.tga");
 
     delete model_;
+    printf("ok");
     return 0;
 }

@@ -9,7 +9,7 @@ set(SOURCES
     model.cpp
     our_gl.cpp
     tgaimage.cpp
-    "matrix&vector_math.cpp"
+    matrix_vector_math.cpp
 )
 
 add_executable(main ${SOURCES})
