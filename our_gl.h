@@ -1,11 +1,11 @@
 #ifndef GL
 #define GL
 
-#include"matrix&vector_math.h"
+#include"MatrixVectorMath.h"
 #include"tgaimage.h" 
-extern Matrix modelview;
-extern Matrix View;
-extern Matrix projection_;
+extern Matrix ModelView;
+extern Matrix Viewport;
+extern Matrix Projection;
 
 void view(int x,int y,int w,int h);
 void projection(float coeff=0.0f);

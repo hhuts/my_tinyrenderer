@@ -3,32 +3,32 @@
 #include <cstdlib>
 #include "our_gl.h"
 #include <algorithm>
-Matrix modelview;
-Matrix View;
-Matrix projection_;
+Matrix ModelView;
+Matrix Viewport;
+Matrix Projection;
 
 ishader::~ishader(){}
 
 void view(int x, int y, int w, int h){
-    View = Matrix::identity();
-    View[0][3] = x+w/2.f;
-    View[1][3] = y+h/2.f;
-    View[2][3] = 255.f/2.f;
-    View[0][0] = w/2.f;
-    View[1][1] = h/2.f;
-    View[2][2] = 255.f/2.f;
+    Viewport = Matrix::identity();
+    Viewport[0][3] = x+w/2.f;
+    Viewport[1][3] = y+h/2.f;
+    Viewport[2][3] = 255.f/2.f;
+    Viewport[0][0] = w/2.f;
+    Viewport[1][1] = h/2.f;
+    Viewport[2][2] = 255.f/2.f;
 }
 
 void projection(float coeff) {
-    projection_ = Matrix::identity();
-    projection_[3][2] = coeff;
+    Projection= Matrix::identity();
+    Projection[3][2] = coeff;
 }
 
 void lookat(Vec3f eye, Vec3f center, Vec3f up) {
     Vec3f z = (eye-center).normalize();
     Vec3f x = cross(up,z).normalize();
     Vec3f y = cross(z,x).normalize();
-    modelview = Matrix::identity();
+    ModelView = Matrix::identity();
     Matrix translaition = Matrix::identity();
 	Matrix rotation     = Matrix::identity();
 	for (int i = 0; i < 3; i++) {
@@ -39,11 +39,11 @@ void lookat(Vec3f eye, Vec3f center, Vec3f up) {
         rotation[1][i] = y[i];
         rotation[2][i] = z[i];
     }
-    modelview = rotation* translaition;
+    ModelView = rotation* translaition;
 }
 
 Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P) {
-    Vec3f s[3];
+    Vec3f s[2];
     for (int i=2; i--; ) {
         s[i][0] = C[i]-A[i];
         s[i][1] = B[i]-A[i];
@@ -55,7 +55,7 @@ Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P) {
     return Vec3f(-1,1,1);
 }
 
-void triangle(Vec4f *pts,ishader &shader,TGAimage &zbuffer,TGAimage &image){
+void triangle(Vec4f *pts,ishader &shader,TGAimage &image,TGAimage &zbuffer){
     Vec2f bboxmin( std::numeric_limits<float>::max(),  std::numeric_limits<float>::max());
     Vec2f bboxmax(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
     for (int i=0; i<3; i++) {
@@ -70,18 +70,18 @@ void triangle(Vec4f *pts,ishader &shader,TGAimage &zbuffer,TGAimage &image){
     TGAColor color;
     for(p.x=bboxmin.x;p.x<=bboxmax.x;p.x++){
         for(p.y=bboxmin.y;p.y<=bboxmax.y;p.y++){
-            Vec3f c = barycentric(pro<2>(pts[0]/pts[0][3]), pro<2>(pts[1]/pts[1][3]), pro<2>(pts[2]/pts[2][3]), pro<2>(p));
+            Vec3f c = barycentric(proj<2>(pts[0]/pts[0][3]), proj<2>(pts[1]/pts[1][3]), proj<2>(pts[2]/pts[2][3]), proj<2>(p));
 
             float z_p=(pts[0][2]/pts[0][3])*c.x+(pts[0][2]/pts[1][3])*c.y+(pts[0][2]/pts[2][3])*c.z;
             int frag_depth=std::max(0,std::min(255,int(z_p+.5f)));
 
-            if (c.x<0 || c.y<0 || c.z<0 || zbuffer.get_color(p.x, p.y)[0]>frag_depth) continue;
+            if (c.x<0 || c.y<0 || c.z<0 || zbuffer.get(p.x, p.y)[0]>frag_depth) continue;
 
             bool discard=shader.fragment(c,color);
 
             if(!discard){
-                zbuffer.set_color(p.x,p.y,TGAColor(frag_depth));
-                image.set_color(p.x,p.y,color);
+                zbuffer.set(p.x,p.y,TGAColor(frag_depth));
+                image.set(p.x,p.y,color);
             }
         }
     }
