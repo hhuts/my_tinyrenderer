@@ -2,18 +2,18 @@
 #define _MODEL
 #include<vector>
 #include<string>
-#include"matrix_vector_math.h"
+#include"MatrixVectorMath.h"
 #include"tgaimage.h"
 class model{
     private:
         std::vector<Vec3f> verts_;
-        std::vector<std::vector<Vec3i>> faces;
-        std::vector<Vec3f> norms;
+        std::vector<std::vector<Vec3i>> faces_;
+        std::vector<Vec3f> norms_;
         std::vector<Vec2f> uv_;
         TGAimage diffusemap_;
         TGAimage normalmap_;
         TGAimage specularmap_;
-        void load_texture(std::string fileaname,const char *suffix,TGAimage &image);
+        void load_texture(std::string fileaname,const char *suffix,TGAimage &img);
     public:
         model(const char *filename);
         ~model();
