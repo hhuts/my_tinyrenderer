@@ -30,8 +30,8 @@ class TGAColor{
     unsigned char bytespp;
 
     TGAColor():bgra(),bytespp(1){
-        for(auto& i:bgra){
-            i=0;
+        for(int i=0;i<4;++i){
+            bgra[i]=0;
         }
     }
 
@@ -43,15 +43,18 @@ class TGAColor{
     }
 
     TGAColor(unsigned char v):bgra(),bytespp(1){
-        for(auto& i:bgra){
-            i=0;
+        for(int i=0;i<4;++i){
+            bgra[i]=0;
         }
         bgra[0]=v;
     }
 
     TGAColor(const unsigned char *p,unsigned char bpp):bgra(),bytespp(bpp){
-        for(int i=0;i<4;++i){
-            bgra[i]=i<(int)bpp?p[i]:0;
+        for(int i=0;i<(int)bpp;++i){
+            bgra[i]=p[i];
+        }
+        for(int i=bpp;i<4;++i){
+            bgra[i]=0;
         }
     }
 
@@ -59,7 +62,7 @@ class TGAColor{
 
     TGAColor operator*(float num)const{
         TGAColor res=*this;
-        num=(num<0.f?0.f:(num>1.f?1.f:num));
+        num=(num>1.f?1.f:(num<0.f?0.f:num));
         for(int i=0;i<4;++i){
             res.bgra[i]=bgra[i]*num;
         }
@@ -78,20 +81,20 @@ class TGAimage{
         bool unload_rle_data(std::ofstream &out);
     public:
         enum format{
-            B=1,RGB=3,RGBA=4
+            GRAYSCALE=1,RGB=3,RGBA=4
         };
 
         TGAimage();
-        TGAimage(int w,int h,int bytespp);
+        TGAimage(int w,int h,int bpp);
         TGAimage(const TGAimage &img);
         bool read_tga_file(const char *filename);
-        bool write_tga_file(const char *filename,bool rle=true);
-        bool horizontally();
-        bool vertically();
+        bool write_tga_file(const char *filename,bool rle=false);
+        bool filp_horizontally();
+        bool filp_vertically();
         bool scale(int w,int h);
-        TGAColor get_color(int x,int y);
-        bool set_color(int x,int y,TGAColor &c);
-        bool set_color(int x,int y,TGAColor const &c);
+        TGAColor get(int x,int y);
+        bool set(int x,int y,TGAColor &c);
+        bool set(int x,int y,const TGAColor &c);
         ~TGAimage();
         TGAimage & operator= (const TGAimage &image);
         int get_width();
